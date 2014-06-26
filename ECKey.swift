@@ -5,6 +5,8 @@
 //  Created by Sjors Provoost on 26-06-14.
 
 import Foundation
+//import CryptoCoin
+
 
 class ECKey {
     let privateKey: UInt256
