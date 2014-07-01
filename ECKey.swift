@@ -19,8 +19,13 @@ class ECKey {
         self.privateKey = privateKey
     }
     
+    init(_ privateKeyHex: String) {
+        self.privateKey = UInt256(hexStringValue: privateKeyHex)
+    }
+    
     class func createRandom () -> ECKey {
         return ECKey(privateKey: UInt256([arc4random_uniform(UInt32.max), arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max)]))
     }
-
+    
+    
 }

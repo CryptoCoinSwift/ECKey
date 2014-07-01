@@ -38,4 +38,6 @@ class ECKeyTests: XCTestCase {
         XCTAssertEqual(ecKey.privateKeyHexString , "1F", "Hex string");
         
     }
+    
+
 }
