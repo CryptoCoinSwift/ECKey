@@ -6,6 +6,8 @@
 
 import Foundation
 
+import UInt256
+
 class ECKey {
     let privateKey: UInt256
     let curve: ECurve
