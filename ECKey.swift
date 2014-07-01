@@ -6,6 +6,7 @@
 
 import Foundation
 
+import ECurve
 import UInt256
 
 class ECKey {

@@ -7,6 +7,8 @@
 
 import XCTest
 import CryptoCoin
+import ECurve
+import UInt256
 
 class ECKeyTests: XCTestCase {
     
