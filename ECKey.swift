@@ -5,27 +5,31 @@
 //  Created by Sjors Provoost on 26-06-14.
 
 import Foundation
-//import CryptoCoin
-
 
 class ECKey {
     let privateKey: UInt256
-        
+    let curve: ECurve
+    
+    @lazy var publicKeyPoint: ECPoint = self.privateKey * self.curve.G
+    
+    
     var privateKeyHexString: String {
         return privateKey.toHexString
     }
     
-    init(privateKey: UInt256) {
+    init(_ privateKey: UInt256, _ curve: ECurve) {
         self.privateKey = privateKey
+        self.curve = curve
     }
     
-    init(_ privateKeyHex: String) {
-        self.privateKey = UInt256(hexStringValue: privateKeyHex)
+    convenience init(_ privateKeyHex: String, _ curve: ECurve) {
+        self.init(UInt256(hexStringValue: privateKeyHex), curve)
     }
     
-    class func createRandom () -> ECKey {
-        return ECKey(privateKey: UInt256([arc4random_uniform(UInt32.max), arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max)]))
+    class func createRandom (curve: ECurve) -> ECKey {
+        return ECKey(UInt256([arc4random_uniform(UInt32.max), arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max)]), curve)
     }
+    
     
     
 }
