@@ -39,23 +39,23 @@ class ECKeyTests: XCTestCase {
     func testPrivateKeyHexString() {
         let ecKey = ECKey(0x1F, curve)
         
-        XCTAssertEqual(ecKey.privateKeyHexString , "1F", "Hex string");
+        XCTAssertEqual(ecKey.privateKeyHexString , "000000000000000000000000000000000000000000000000000000000000001F", "Hex string");
         
     }
     
-    func testPublicKeyPoint() {
-
-        
-        let privateKey = UInt256(decimalStringValue: "19898843618908353587043383062236220484949425084007183071220218307100305431102")
-        let publicKeyX = FFInt(dec: "83225686012142088543596389522774768397204444195709443235253141114409346958144", curve.field)
-        let publicKeyY = FFInt(dec: "23739058578904784236915560265041168694780215705543362357495033621678991351768", curve.field)
-        
-        let publicKeyPoint = ECPoint(x: publicKeyX, y: publicKeyY, curve: curve)
-        
-        let result = ECKey(privateKey, curve).publicKeyPoint
-        
-        XCTAssertTrue(result == publicKeyPoint, result.description);
-    }
+//    func testPublicKeyPoint() {
+//
+//        
+//        let privateKey = UInt256(decimalStringValue: "19898843618908353587043383062236220484949425084007183071220218307100305431102")
+//        let publicKeyX = FFInt(dec: "83225686012142088543596389522774768397204444195709443235253141114409346958144", curve.field)
+//        let publicKeyY = FFInt(dec: "23739058578904784236915560265041168694780215705543362357495033621678991351768", curve.field)
+//        
+//        let publicKeyPoint = ECPoint(x: publicKeyX, y: publicKeyY, curve: curve)
+//        
+//        let result = ECKey(privateKey, curve).publicKeyPoint
+//        
+//        XCTAssertTrue(result == publicKeyPoint, result.description);
+//    }
     
 
 }

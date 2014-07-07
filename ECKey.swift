@@ -17,7 +17,7 @@ class ECKey {
     
     
     var privateKeyHexString: String {
-        return privateKey.toHexString
+        return privateKey.toHexStringOfLength(64)
     }
     
     init(_ privateKey: UInt256, _ curve: ECurve) {
