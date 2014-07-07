@@ -6,8 +6,8 @@
 
 import Foundation
 
-import ECurve
-import UInt256
+import ECurveMac
+import UInt256Mac
 
 class ECKey {
     let privateKey: UInt256
@@ -30,7 +30,19 @@ class ECKey {
     }
     
     class func createRandom (curve: ECurve) -> ECKey {
-        return ECKey(UInt256([arc4random_uniform(UInt32.max), arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max)]), curve)
+        switch curve.field {
+        case let .PrimeField(p):
+            // Private key is a random 256 bit integer smaller than P.
+            while(true) {
+                let candidate = UInt256(arc4random_uniform(UInt32.max), arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max))
+                
+                if candidate < p {
+                    return ECKey(candidate, curve)
+                }
+            }
+
+        }
+        
     }
     
     
