@@ -30,20 +30,18 @@ class ECKey {
     }
     
     class func createRandom (curve: ECurve) -> ECKey {
-        switch curve.field {
-        case let .PrimeField(p):
-            // Private key is a random 256 bit integer smaller than P.
-            while(true) {
-                let candidate = UInt256(arc4random_uniform(UInt32.max), arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max))
-                
-                if candidate < p {
-                    return ECKey(candidate, curve)
-                }
-            }
 
+        // Private key is a random 256 bit integer smaller than n.
+        while(true) {
+            let candidate = UInt256(arc4random_uniform(UInt32.max), arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max))
+            
+            if candidate < curve.n {
+                return ECKey(candidate, curve)
+            }
         }
-        
     }
+
+  
     
     
     
