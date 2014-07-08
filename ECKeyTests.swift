@@ -43,6 +43,7 @@ class ECKeyTests: XCTestCase {
         
     }
     
+    // Disabled because it takes too long in Debug configuration.
 //    func testPublicKeyPoint() {
 //
 //        
