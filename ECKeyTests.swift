@@ -29,15 +29,15 @@ class ECKeyTests: XCTestCase {
     }
     
     func testCreateRandom() {
-        let ecKey1 = ECKey.createRandom(curve);
-        let ecKey2 = ECKey.createRandom(curve);
+        let ecKey1 = ECKey.createRandom(curve, skipPublicKeyGeneration: true);
+        let ecKey2 = ECKey.createRandom(curve, skipPublicKeyGeneration: true);
         
         XCTAssertNotEqual(ecKey1.privateKey, ecKey2.privateKey, "Two random private keys can't be equal");
         
     }
     
     func testPrivateKeyHexString() {
-        let ecKey = ECKey(0x1F, curve)
+        let ecKey = ECKey(0x1F, curve, skipPublicKeyGeneration: true)
         
         XCTAssertEqual(ecKey.privateKeyHexString , "000000000000000000000000000000000000000000000000000000000000001F", "Hex string");
         
