@@ -20,9 +20,19 @@ class ECKey {
         return privateKey.toHexStringOfLength(64)
     }
     
+    var publicKeyHexString: String {
+        return "04" + publicKeyPoint.x!.value.toHexStringOfLength(64) + publicKeyPoint.y!.value.toHexStringOfLength(64)
+    }
+    
     init(_ privateKey: UInt256, _ curve: ECurve) {
         self.privateKey = privateKey
         self.curve = curve
+    }
+    
+    init(privateKey: UInt256, publicKeyPoint: ECPoint) {
+        self.privateKey = privateKey
+        self.publicKeyPoint = publicKeyPoint
+        self.curve = publicKeyPoint.curve
     }
     
     convenience init(_ privateKeyHex: String, _ curve: ECurve) {
