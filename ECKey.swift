@@ -37,12 +37,12 @@ class ECKey {
         self.init(UInt256(hexStringValue: privateKeyHex), curve, skipPublicKeyGeneration: skipPublicKeyGeneration)
     }
     
-    var privateKeyHexString: String {
-    return privateKey.toHexStringOfLength(64)
+    public var privateKeyHexString: String {
+        return privateKey.toHexStringOfLength(64)
     }
     
-    var publicKeyHexString: String {
-    return "04" + publicKeyPoint.x!.value.toHexStringOfLength(64) + publicKeyPoint.y!.value.toHexStringOfLength(64)
+    public var publicKeyHexString: String {
+        return "04" + publicKeyPoint.x!.value.toHexStringOfLength(64) + publicKeyPoint.y!.value.toHexStringOfLength(64)
     }
     
     class func pointFromHex (hexString: String, _ curve: ECurve) -> ECPoint {
