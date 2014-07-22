@@ -9,14 +9,14 @@ import Foundation
 import ECurveMac
 import UInt256Mac
 
-class ECKey {
-    let privateKey: UInt256
-    let curve: ECurve
+public class ECKey {
+    public let privateKey: UInt256
+    public let curve: ECurve
     
-    let publicKeyPoint: ECPoint
+    public let publicKeyPoint: ECPoint
     
     
-    init(_ privateKey: UInt256, _ curve: ECurve, skipPublicKeyGeneration: Bool = false) {
+    public init(_ privateKey: UInt256, _ curve: ECurve, skipPublicKeyGeneration: Bool = false) {
         self.privateKey = privateKey
         self.curve = curve
         
@@ -27,13 +27,13 @@ class ECKey {
         }
     }
     
-    init(privateKey: UInt256, publicKeyPoint: ECPoint) {
+    public init(privateKey: UInt256, publicKeyPoint: ECPoint) {
         self.privateKey = privateKey
         self.publicKeyPoint = publicKeyPoint
         self.curve = publicKeyPoint.curve
     }
     
-    convenience init(_ privateKeyHex: String, _ curve: ECurve, skipPublicKeyGeneration: Bool = false) {
+    public convenience init(_ privateKeyHex: String, _ curve: ECurve, skipPublicKeyGeneration: Bool = false) {
         self.init(UInt256(hexStringValue: privateKeyHex), curve, skipPublicKeyGeneration: skipPublicKeyGeneration)
     }
     
@@ -45,7 +45,7 @@ class ECKey {
         return "04" + publicKeyPoint.x!.value.toHexStringOfLength(64) + publicKeyPoint.y!.value.toHexStringOfLength(64)
     }
     
-    class func pointFromHex (hexString: String, _ curve: ECurve) -> ECPoint {
+    public class func pointFromHex (hexString: String, _ curve: ECurve) -> ECPoint {
         assert(countElements(hexString) == 130, "Wrong size")
         
         let x: String = (hexString as NSString).substringWithRange(NSRange(location: 2, length: 64))
@@ -55,7 +55,7 @@ class ECKey {
         
     }
     
-    class func createRandom (curve: ECurve, skipPublicKeyGeneration: Bool = false) -> ECKey {
+    public class func createRandom (curve: ECurve, skipPublicKeyGeneration: Bool = false) -> ECKey {
 
         // Private key is a random 256 bit integer smaller than n.
         while(true) {
