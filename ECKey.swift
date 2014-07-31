@@ -42,7 +42,15 @@ public class ECKey {
     }
     
     public var publicKeyHexString: String {
-        return "04" + publicKeyPoint.x!.value.toHexStringOfLength(64) + publicKeyPoint.y!.value.toHexStringOfLength(64)
+        switch publicKeyPoint.coordinate {
+        case let .Affine(x,y):
+            return "04" + x!.value.toHexStringOfLength(64) + y!.value.toHexStringOfLength(64)
+        default:
+            assert(false, "Not implemented")
+            return ""
+        }
+
+
     }
     
     public class func pointFromHex (hexString: String, _ curve: ECurve) -> ECPoint {
