@@ -6,8 +6,8 @@
 
 import Foundation
 
-import ECurveMac
-import UInt256Mac
+import ECurve
+import UInt256
 
 public class ECKey {
     public let privateKey: UInt256

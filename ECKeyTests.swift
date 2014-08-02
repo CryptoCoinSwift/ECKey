@@ -6,9 +6,9 @@
 //
 
 import XCTest
-import CryptoCoinMac
-import ECurveMac
-import UInt256Mac
+import CryptoCoin
+import ECurve
+import UInt256
 
 class ECKeyTests: XCTestCase {
     
