@@ -6,8 +6,10 @@
 
 import Foundation
 
+#if os(OSX)
 import ECurve
 import UInt256
+#endif
 
 public class ECKey {
     public let privateKey: UInt256
