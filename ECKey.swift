@@ -51,8 +51,6 @@ public class ECKey {
             assert(false, "Not implemented")
             return ""
         }
-
-
     }
     
     public class func pointFromHex (hexString: String, _ curve: ECurve) -> ECPoint {
@@ -67,5 +65,75 @@ public class ECKey {
     public class func createRandom (curve: ECurve, skipPublicKeyGeneration: Bool = false) -> ECKey {
         // Private key is a random 256 bit integer smaller than n.
         return ECKey(UInt256.secureRandom(curve.n), curve, skipPublicKeyGeneration: skipPublicKeyGeneration)
-      }
+    }
+    
+    public func sign (digest: UInt256) -> (UInt256, UInt256) {
+        
+        let field = FiniteField.PrimeField(p: curve.n)
+        let zero = field.int(0)
+        let e = field.int(digest)
+        
+        var s = zero
+        var k: UInt256 = 0
+        var r = zero
+
+        
+        while s == field.int(0) {
+            
+        
+            while r == zero {
+                k = UInt256.secureRandom(curve.n - 1) + 1
+                
+                let R = k * self.curve.G
+                
+                switch R.coordinate {
+                case let .Affine(x,y):
+                    r = field.int(x!.value)
+
+                default:
+                    assert(false, "Not affine")
+                }
+                
+            }
+            
+            
+            s = (e + privateKey * r ) / field.int(k)
+
+        }
+        
+        return (r.value,s.value)
+        
+    }
+    
+    public class func verifySignature(digest: UInt256, r: UInt256, s:UInt256, publicKey: ECPoint) -> Bool {
+        
+        let curve = publicKey.curve
+        let field = FiniteField.PrimeField(p: curve.n)
+        let e = field.int(digest)
+        
+        if r <= 0 || r >= curve.n || s <= 0 || s >= curve.n {
+            return false
+        }
+        
+        let w: FFInt = 1 / field.int(s)
+        
+        let u1 = e * w
+        let u2 = field.int(r) * w
+
+        let P = u1.value * curve.G + u2.value * publicKey
+        
+        println(P)
+        
+        switch P.coordinate {
+        case let .Affine(x,y):
+            let px = field.int(x!.value)
+            return px == field.int(r)
+        default:
+            assert(false, "Not affine")
+            return false
+        }
+        
+        
+
+    }
 }

@@ -71,5 +71,43 @@ class ECKeyTests: XCTestCase {
 //        XCTAssertTrue(result == publicKeyPoint, result.description);
 //    }
     
+    func testSign() { // Signature verification is a bit slow
+        let privateKey = UInt256(hexStringValue: "18E14A7B6A307F426A94F8114701E7C8E774E7F9A47E2C2035DB29A206321725")
+        
+        let publicKeyX = FFInt("50863AD64A87AE8A2FE83C1AF1A8403CB53F53E486D8511DAD8A04887E5B2352", curve.field)
+        let publicKeyY = FFInt("2CD470243453A299FA9E77237716103ABC11A1DF38855ED6F2EE187E9C582BA6", curve.field)
+        
+        let publicKeyPoint = ECPoint(x: publicKeyX, y: publicKeyY, curve: curve)
+
+        let ecKey = ECKey(privateKey: privateKey, publicKeyPoint: publicKeyPoint)
+
+        // Not checking the signature
+        let digest: UInt256 = 0x32
+        let (r,s) = ecKey.sign(digest)
+        let (r2,s2) = ecKey.sign(digest)
+
+        XCTAssertNotEqual(r,r2, "Not a nonce")
+        XCTAssertNotEqual(s,s2, "No two signatures can be identical")
+
+        // Uncomment to print r and s values:
+//        XCTAssertEqual(r.toHexString + " " + s.toHexString, "", "Not a real test.");
+
+        
+        // Valid signature (checked with Ruby ecdsa gem): 61CCAE675AE09AF5D3B1831D1604B6A578DCBB3493DC04A7077E4BD194CBBB6C AE1DA0CA5D73FEE85885F31BEF5894F2D2CB3E8392163E20127368E33534B53D
+    
+        XCTAssertTrue(ECKey.verifySignature(digest, r: r, s: s, publicKey: publicKeyPoint), "Verification")
+        
+        XCTAssertFalse(ECKey.verifySignature(digest, r: r, s: s + 1, publicKey: publicKeyPoint), "Verification")
+    
+        XCTAssertFalse(ECKey.verifySignature(digest, r: r, s: s + 1, publicKey: publicKeyPoint.double), "Verification")
+        
+        let r3 = UInt256(hexStringValue: "61CCAE675AE09AF5D3B1831D1604B6A578DCBB3493DC04A7077E4BD194CBBB6C")
+        
+        let s3 = UInt256(hexStringValue: "AE1DA0CA5D73FEE85885F31BEF5894F2D2CB3E8392163E20127368E33534B53D")
+        
+        XCTAssertTrue(ECKey.verifySignature(digest, r: r3, s: s3, publicKey: publicKeyPoint), "Verification")
+
+        
+    }
 
 }
