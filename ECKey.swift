@@ -29,11 +29,19 @@ public class ECKey {
         }
     }
     
+    
     public init(privateKey: UInt256, publicKeyPoint: ECPoint) {
         self.privateKey = privateKey
         self.publicKeyPoint = publicKeyPoint
         self.curve = publicKeyPoint.curve
     }
+    
+    public init(publicKeyPoint: ECPoint) {
+        self.privateKey = 0
+        self.publicKeyPoint = publicKeyPoint
+        self.curve = publicKeyPoint.curve
+    }
+    
     
     public convenience init(_ privateKeyHex: String, _ curve: ECurve, skipPublicKeyGeneration: Bool = false) {
         self.init(UInt256(hexStringValue: privateKeyHex), curve, skipPublicKeyGeneration: skipPublicKeyGeneration)
@@ -121,9 +129,7 @@ public class ECKey {
         let u2 = field.int(r) * w
 
         let P = u1.value * curve.G + u2.value * publicKey
-        
-        println(P)
-        
+                
         switch P.coordinate {
         case let .Affine(x,y):
             let px = field.int(x!.value)
@@ -132,8 +138,38 @@ public class ECKey {
             assert(false, "Not affine")
             return false
         }
-        
-        
 
+    }
+    
+    public class func der (r: UInt256, _ s: UInt256) -> NSData {
+        // 0x30, 0x45, 0x02, 0x20
+        
+        var bytes: [UInt8] = [0x30, 0x45, 0x02, 0x20]
+        var signature = NSMutableData(bytes: &bytes, length: bytes.count)
+        
+        signature.appendData(r.toData)
+        bytes = [0x02, 0x21, 0x00]
+        signature.appendBytes(&bytes, length: 3)
+        
+        signature.appendData(s.toData)
+        
+        return signature as NSData
+    }
+    
+    public class func importDer (data: NSData) -> (UInt256, UInt256) {
+        var R: [UInt32] = [0,0,0,0,0,0,0,0]
+        var S: [UInt32] = [0,0,0,0,0,0,0,0]
+        
+        
+        data.getBytes(&R, range: NSMakeRange(4, 0x20))
+        data.getBytes(&S, range: NSMakeRange(37, 0x20))
+        
+        println(R)
+        println(S)
+        
+        let r = UInt256(R[0], R[1], R[2], R[3], R[4], R[5], R[6], R[7])
+        let s = UInt256(S[0], S[1], S[2], S[3], S[4], S[5], S[6], S[7])
+        
+        return (r,s)
     }
 }
