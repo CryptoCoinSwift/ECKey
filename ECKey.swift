@@ -62,23 +62,10 @@ public class ECKey {
         let y: String = (hexString as NSString).substringWithRange(NSRange(location: 66, length: 64))
         
         return ECPoint(x: FFInt(x, curve.field), y: FFInt(y, curve.field), curve: curve)
-        
     }
     
     public class func createRandom (curve: ECurve, skipPublicKeyGeneration: Bool = false) -> ECKey {
-
         // Private key is a random 256 bit integer smaller than n.
-        while(true) {
-            let candidate = UInt256(arc4random_uniform(UInt32.max), arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max),arc4random_uniform(UInt32.max))
-            
-            if candidate < curve.n {
-                return ECKey(candidate, curve, skipPublicKeyGeneration: skipPublicKeyGeneration)
-            }
-        }
-    }
-
-  
-    
-    
-    
+        return ECKey(UInt256.secureRandom(curve.n), curve, skipPublicKeyGeneration: skipPublicKeyGeneration)
+      }
 }
