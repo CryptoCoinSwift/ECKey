@@ -162,13 +162,10 @@ public class ECKey {
         
         
         data.getBytes(&R, range: NSMakeRange(4, 0x20))
-        data.getBytes(&S, range: NSMakeRange(37, 0x20))
+        data.getBytes(&S, range: NSMakeRange(39, 0x20))
         
-        println(R)
-        println(S)
-        
-        let r = UInt256(R[0], R[1], R[2], R[3], R[4], R[5], R[6], R[7])
-        let s = UInt256(S[0], S[1], S[2], S[3], S[4], S[5], S[6], S[7])
+        let r = UInt256(R[0].bigEndian, R[1].bigEndian, R[2].bigEndian, R[3].bigEndian, R[4].bigEndian, R[5].bigEndian, R[6].bigEndian, R[7].bigEndian)
+        let s = UInt256(S[0].bigEndian, S[1].bigEndian, S[2].bigEndian, S[3].bigEndian, S[4].bigEndian, S[5].bigEndian, S[6].bigEndian, S[7].bigEndian)
         
         return (r,s)
     }
